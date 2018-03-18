@@ -1,14 +1,16 @@
-/* Exercise 17.2 from "Scala for the impatient"
+/*
+  Exercises from "Scala for the impatient"
+*/
+package concurrency 
+
+import com.twitter.util.{Future, Await}
+
+/* Exercise 17.2:
 
 Write a function doInOrder that, given two functions f: T=>Future[U] and
 g: U=>Future[V], produces a function T=>Future[V] that, for a given t,
 eventually yields g(f(t))
 */
-
-package concurrency 
-
-import com.twitter.util.{Future, Await}
-
 object DoInOrder {
   def doInOrder[T, U, V](
       f: T => Future[U],
@@ -53,4 +55,5 @@ object DoInOrder {
     println(Await.result(df2(325)))
   }
 }
+
 

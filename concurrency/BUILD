@@ -21,3 +21,10 @@ jvm_binary(
   ]
 )
   
+jvm_binary(
+  name='sequential-bin',
+  main='concurrency.Sequential',
+  dependencies=[
+    ':concurrency'
+  ]
+)
