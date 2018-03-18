@@ -6,14 +6,6 @@ scala_library(
 )
 
 jvm_binary(
-  name='hello-bin',
-  main='concurrency.HelloConcurrency',
-  dependencies=[
-    ':concurency'
-  ]
-)
-
-jvm_binary(
   name='doinorder-bin',
   main='concurrency.DoInOrder',
   dependencies=[
