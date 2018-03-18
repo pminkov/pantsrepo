@@ -1,0 +1,9 @@
+jar_library(name='twitter-util',
+  jars=[
+    jar(
+      org='com.twitter',
+      name='util-core_2.12',
+      rev='18.3.0'
+    )
+  ]
+)
