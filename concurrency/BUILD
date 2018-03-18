@@ -28,3 +28,11 @@ jvm_binary(
     ':concurrency'
   ]
 )
+
+jvm_binary(
+  name='dotogether-bin',
+  main='concurrency.DoTogether',
+  dependencies=[
+    ':concurrency'
+  ]
+)

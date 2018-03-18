@@ -4,6 +4,7 @@
 package concurrency 
 
 import com.twitter.util.{Future, Await}
+import concurrency.Funcs._
 
 /* Exercise 17.2:
 
@@ -30,17 +31,7 @@ object DoInOrder {
     f(x).flatMap(u => g(u))
   }
 
-  def intToString(x: Int): Future[String] = {
-    Future {
-      x.toString
-    }
-  }
 
-  def firstLetter(x: String): Future[Char] = {
-    Future {
-      x(0)
-    }
-  }
 
   def main(args: Array[String]): Unit = {
     println("DoInOrder")

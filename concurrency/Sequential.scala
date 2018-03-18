@@ -4,6 +4,7 @@
 package concurrency 
 
 import com.twitter.util.{Future, Await}
+import concurrency.Funcs._
 
 /*
   Exercise 17.3: Repeat the preceding exercise for any
@@ -18,24 +19,6 @@ object Sequential {
       val ret: Future[T] = 
         funcs(0)(x).flatMap(res => runSequential[T](funcs.tail:_*)(res))
       ret
-    }
-  }
-
-  def square(x: Int): Future[Int] = {
-    Future {
-      x * x
-    }
-  }
-
-  def double(x: Int): Future[Int] = {
-    Future {
-      2 * x
-    }
-  }
-
-  def incr(x: Int): Future[Int] = {
-    Future {
-      x + 1
     }
   }
 
