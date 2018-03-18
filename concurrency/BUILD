@@ -1,6 +1,5 @@
 scala_library(
-  name='hello',
-  sources='Hello.scala',
+  sources=globs('*.scala'),
   dependencies=[
     '3rdparty/jvm:twitter-util',
   ]
@@ -10,6 +9,15 @@ jvm_binary(
   name='hello-bin',
   main='concurrency.HelloConcurrency',
   dependencies=[
-    ':hello'
+    ':concurency'
   ]
 )
+
+jvm_binary(
+  name='doinorder-bin',
+  main='concurrency.DoInOrder',
+  dependencies=[
+    ':concurrency'
+  ]
+)
+  
