@@ -6,25 +6,10 @@ scala_library(
 )
 
 jvm_binary(
-  name='doinorder-bin',
-  main='concurrency.DoInOrder',
+  name="runner",
+  main="concurrency.Runner",
   dependencies=[
-    ':concurrency'
-  ]
-)
-  
-jvm_binary(
-  name='sequential-bin',
-  main='concurrency.Sequential',
-  dependencies=[
-    ':concurrency'
+    ":concurrency"
   ]
 )
 
-jvm_binary(
-  name='dotogether-bin',
-  main='concurrency.DoTogether',
-  dependencies=[
-    ':concurrency'
-  ]
-)

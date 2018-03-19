@@ -12,7 +12,7 @@ Write a function doInOrder that, given two functions f: T=>Future[U] and
 g: U=>Future[V], produces a function T=>Future[V] that, for a given t,
 eventually yields g(f(t))
 */
-object DoInOrder {
+object DoInOrder extends CanRun {
   def doInOrder[T, U, V](
       f: T => Future[U],
       g: U => Future[V]): T => Future[V] = {
@@ -31,9 +31,7 @@ object DoInOrder {
     f(x).flatMap(u => g(u))
   }
 
-
-
-  def main(args: Array[String]): Unit = {
+  def run(): Unit = {
     println("DoInOrder")
 
     val f: Int => Future[String] = intToString

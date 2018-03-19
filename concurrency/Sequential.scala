@@ -10,7 +10,7 @@ import concurrency.Funcs._
   Exercise 17.3: Repeat the preceding exercise for any
   sequence of functions of type T => Future[T]
 */
-object Sequential {
+object Sequential extends CanRun {
   def runSequential[T](
       funcs: T => Future[T]*)(x: T): Future[T] = {
     if (funcs.length == 1) {
@@ -22,12 +22,10 @@ object Sequential {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    println("Sequential")
+  def run(): Unit = {
     // sf(5) = ((5 * 2) + 1) ** 2
     val sf: Int => Future[Int] = runSequential(double, incr, square)
 
     println(Await.result(sf(5)))
   }
 }
-
