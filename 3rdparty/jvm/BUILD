@@ -7,3 +7,14 @@ jar_library(name='twitter-util',
     )
   ]
 )
+
+jar_library(name='twitter-finagle-http',
+  jars=[
+    jar(
+      org='com.twitter',
+      name='finagle-http_2.12',
+      rev='18.5.0',
+    )
+  ]
+)
+
