@@ -1,5 +1,5 @@
 jvm_binary(
-  source = 'HelloWorld.java',
-  main = 'com.pminkov.search.HelloWorld',
+  source = 'SearchExample.java',
+  main = 'com.pminkov.search.SearchExample',
 )
 
