@@ -3,10 +3,83 @@ package com.pminkov.learnjava;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 abstract class Exercise {
   abstract public void run();
 }
+
+
+class FunctionalInterfaces extends Exercise {
+  interface IntFilter {
+    abstract boolean test(int value);
+  }
+
+  public boolean test(IntFilter fi, int value) {
+    return fi.test(value);
+  }
+
+  @Override
+  public void run() {
+    List<Integer> alist = Arrays.asList(-1, 5, 16, 3, -2, 18);
+    ArrayList<Integer> blist = new ArrayList<>();
+
+    for (Integer x : alist) {
+      if (test(v -> v > 0, x)) {
+        blist.add(x);
+      }
+    }
+
+    System.out.println(alist.toString());
+    System.out.println(blist.toString());
+  }
+}
+
+
+class GenericFunctionalInterfaces extends Exercise {
+  interface Filter<T> {
+    abstract boolean test(T value);
+  }
+
+  public <T> boolean test(Filter<T> fi, T value) {
+    return fi.test(value);
+  }
+
+  void filterInts() {
+    List<Integer> alist = Arrays.asList(-1, 5, 16, 3, -2, 18);
+    ArrayList<Integer> blist = new ArrayList<>();
+
+    for (Integer x : alist) {
+      if (test(v -> v > 0, x)) {
+        blist.add(x);
+      }
+    }
+
+    System.out.println(alist.toString());
+    System.out.println(blist.toString());
+  }
+
+  void filterStrings() {
+    List<String> alist = Arrays.asList("petko", "was", "here", "toWriteSomeJava");
+    ArrayList<String> blist = new ArrayList<>();
+
+    for (String x : alist) {
+      if (test(v -> v.length() >= 5, x)) {
+        blist.add(x);
+      }
+    }
+
+    System.out.println(alist.toString());
+    System.out.println(blist.toString());
+  }
+
+  @Override
+  public void run() {
+    filterInts();
+    filterStrings();
+  }
+}
+
 
 class LuckySort extends Exercise {
   public void run() {
@@ -44,8 +117,7 @@ class LuckySort extends Exercise {
 
 public class LearnJava {
   public static void main(String[] args) {
-      LuckySort ls = new LuckySort();
-
-      ls.run();
+      GenericFunctionalInterfaces fi  = new GenericFunctionalInterfaces();
+      fi.run();
   }
 }
