@@ -1,14 +1,79 @@
 package com.pminkov.learnjava;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 abstract class Exercise {
   abstract public void run();
 }
 
+class UseScheduledExecutorService extends Exercise {
+  private final ScheduledExecutorService scheduler =
+      Executors.newScheduledThreadPool(1);
+
+  @Override
+  public void run() {
+    Runnable saySomething = new Runnable() {
+      private int count = 0;
+
+      public void run() {
+        count++;
+        System.out.println("Just saying " + count);
+      }
+    };
+
+    scheduler.scheduleWithFixedDelay(saySomething, 0, 1, TimeUnit.SECONDS);
+
+    try {
+      Thread.sleep(1000 * 10);
+    } catch (InterruptedException ex) {
+
+    }
+  }
+}
+
+class BasicConcurrency extends Exercise {
+  @Override
+  public void run() {
+    Executor executor = Executors.newCachedThreadPool();
+    executor.execute(() -> {
+      for (int i = 0; i < 10; i++) {
+        System.out.println("Hello");
+      }
+    });
+  }
+}
+
+class BasicStreams extends Exercise {
+  @Override
+  public void run() {
+    String contents = null;
+    try {
+      contents = new String(Files.readAllBytes(
+          Paths.get("./learnjava/data/big.txt")
+      ));
+    } catch (IOException e) {
+      System.out.println("Oops. Problem reading input.");
+      return;
+    }
+
+    List<String> words = Arrays.asList(contents.split("\\PL+"));
+    System.out.printf("Number of words: %d", words.size());
+
+//    Object[] longWords = words.stream().filter(w -> w.length() > 12).collect(Collectors.toList());
+
+  }
+}
 
 class FunctionalInterfaces extends Exercise {
   interface IntFilter {
@@ -117,7 +182,7 @@ class LuckySort extends Exercise {
 
 public class LearnJava {
   public static void main(String[] args) {
-      GenericFunctionalInterfaces fi  = new GenericFunctionalInterfaces();
-      fi.run();
+      UseScheduledExecutorService exercise = new UseScheduledExecutorService();
+      exercise.run();
   }
 }
