@@ -18,3 +18,13 @@ jar_library(name='twitter-finagle-http',
   ]
 )
 
+jar_library(name='lucene-core',
+  jars=[
+    jar(
+      org='org.apache.lucene',
+      name='lucene-core',
+      rev='7.6.0',
+    )
+  ]
+)
+

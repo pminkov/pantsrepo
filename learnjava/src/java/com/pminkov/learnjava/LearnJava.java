@@ -7,11 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.IntConsumer;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.of;
 
 abstract class Exercise {
   abstract public void run();
@@ -180,9 +184,40 @@ class LuckySort extends Exercise {
   }
 }
 
+class SomethingElse {
+  void hello() {
+    System.out.println("Hello");
+
+  }
+}
+
+class AndMore extends SomethingElse {
+  void moreHello() {
+    this.hello();
+  }
+}
+
+class Optionals extends Exercise {
+/*
+  private Optional<Integer> findUserId(String name) {
+    if (name == "petko")
+  }
+*/
+  @Override
+  public void run() {
+    SomethingElse se = new SomethingElse();
+
+    se.hello();
+
+    AndMore am = new AndMore();
+
+    am.moreHello();
+  }
+}
+
 public class LearnJava {
   public static void main(String[] args) {
-      UseScheduledExecutorService exercise = new UseScheduledExecutorService();
+      Optionals exercise = new Optionals();
       exercise.run();
   }
 }
