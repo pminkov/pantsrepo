@@ -21,7 +21,29 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.util.IOUtils;
 
 
+
+
 public class Search {
+  private static String[] documents = {
+      "This is one document",
+      "This is another document",
+      "Let's not forget the third one",
+      "And this is something else",
+      "Last document"
+  };
+
+  private static void search(String queryString, IndexSearcher isearcher, StandardAnalyzer analyzer) throws IOException, ParseException {
+    System.out.println("Query: " + queryString);
+    QueryParser parser = new QueryParser("fieldname", analyzer);
+    Query query = parser.parse(queryString);
+    ScoreDoc[] hits = isearcher.search(query, 10).scoreDocs;
+    System.out.println("Hits # = " + hits.length);
+    for (int i = 0; i < hits.length; i++) {
+      Document hitDoc = isearcher.doc(hits[i].doc);
+      System.out.println(hits[i].doc + " " + hitDoc.get("fieldname"));
+    }
+  }
+
   public static void main(String[] args) throws IOException, ParseException {
     StandardAnalyzer analyzer = new StandardAnalyzer();
 
@@ -31,29 +53,23 @@ public class Search {
     IndexWriterConfig config = new IndexWriterConfig(analyzer);
     IndexWriter iwriter = new IndexWriter(directory, config);
 
-    Document doc = new Document();
-    String text = "This is the text to be indexed.";
-    doc.add(new Field("fieldname", text, TextField.TYPE_STORED));
-    iwriter.addDocument(doc);
+    for (int di = 0; di < Search.documents.length; di++) {
+      Document doc = new Document();
+      String text = Search.documents[di];
+      doc.add(new Field("fieldname", text, TextField.TYPE_STORED));
+      iwriter.addDocument(doc);
+    }
     iwriter.close();
 
     // Now search the index:
     DirectoryReader ireader = DirectoryReader.open(directory);
     IndexSearcher isearcher = new IndexSearcher(ireader);
 
-    QueryParser parser = new QueryParser("fieldname", analyzer);
-    Query query = parser.parse("tessdddxt");
-    ScoreDoc[] hits = isearcher.search(query, 10).scoreDocs;
-    System.out.println("Hits # = " + hits.length);
-    for (int i = 0; i < hits.length; i++) {
-      Document hitDoc = isearcher.doc(hits[i].doc);
-      System.out.println(hitDoc.get("fieldname"));
-    }
+    search("fieldname: \"document\" OR \"something\"", isearcher, analyzer);
+
     ireader.close();
     directory.close();
     IOUtils.rm(indexPath);
-
-    System.out.println("hello");
   }
 }
 
