@@ -44,6 +44,7 @@ public class Search {
     }
   }
 
+
   public static void main(String[] args) throws IOException, ParseException {
     StandardAnalyzer analyzer = new StandardAnalyzer();
 
