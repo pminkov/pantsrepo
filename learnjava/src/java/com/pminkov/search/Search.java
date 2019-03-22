@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.IntField;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -19,8 +20,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.util.IOUtils;
-
-
+//import org.apache.lucene.document.
 
 
 public class Search {
@@ -30,6 +30,11 @@ public class Search {
       "Let's not forget the third one",
       "And this is something else",
       "Last document"
+  };
+
+  // From 1 to 5. 1 most important.
+  private static int[] importance = {
+      5, 1, 3, 2, 5
   };
 
   private static void search(String queryString, IndexSearcher isearcher, StandardAnalyzer analyzer) throws IOException, ParseException {
@@ -45,11 +50,7 @@ public class Search {
   }
 
 
-  public static void main(String[] args) throws IOException, ParseException {
-    StandardAnalyzer analyzer = new StandardAnalyzer();
-
-    Path indexPath = Files.createTempDirectory("tempIndex");
-
+  private static Directory indexDocs(Path indexPath, StandardAnalyzer analyzer) throws IOException {
     Directory directory = FSDirectory.open(indexPath);
     IndexWriterConfig config = new IndexWriterConfig(analyzer);
     IndexWriter iwriter = new IndexWriter(directory, config);
@@ -58,9 +59,18 @@ public class Search {
       Document doc = new Document();
       String text = Search.documents[di];
       doc.add(new Field("fieldname", text, TextField.TYPE_STORED));
+      doc.add(new IntField("importance", Search.importance[i]));
       iwriter.addDocument(doc);
     }
     iwriter.close();
+
+    return directory;
+  }
+
+  public static void main(String[] args) throws IOException, ParseException {
+    Path indexPath = Files.createTempDirectory("tempIndex");
+    StandardAnalyzer analyzer = new StandardAnalyzer();
+    Directory directory = indexDocs(indexPath, analyzer);
 
     // Now search the index:
     DirectoryReader ireader = DirectoryReader.open(directory);

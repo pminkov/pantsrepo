@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.IntConsumer;
+import java.lang.IllegalArgumentException;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.of;
@@ -215,9 +216,37 @@ class Optionals extends Exercise {
   }
 }
 
+class Exceptions extends Exercise {
+  private int summer(int a ,int b) throws Exception {
+    if (a < 0 || b < 0) {
+      throw new IllegalArgumentException("negative numbers");
+    } else if (a + b > 100) {
+      throw new Exception("sum too big");
+    } else {
+      return a + b;
+    }
+  }
+  @Override
+  public void run() {
+    try {
+      try {
+        int xx = summer(5, -3);
+        System.out.println(xx);
+      } catch (IllegalArgumentException e) {
+        e.printStackTrace();
+        throw e;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } catch (Throwable tt) {
+      tt.printStackTrace();
+    }
+  }
+}
+
 public class LearnJava {
   public static void main(String[] args) {
-      Optionals exercise = new Optionals();
+      Exceptions exercise = new Exceptions();
       exercise.run();
   }
 }
