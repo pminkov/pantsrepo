@@ -1,5 +1,9 @@
 jvm_binary(
-  source = 'SearchExample.java',
-  main = 'com.pminkov.search.SearchExample',
+    source = 'Search.java',
+    main = 'com.pminkov.search.Search',
+    dependencies = [
+        'search/3rdparty/jvm:lucene-core',
+        'search/3rdparty/jvm:lucene-queryparser',
+        'search/3rdparty/jvm:lucene-analyzers-common'
+    ]
 )
-
