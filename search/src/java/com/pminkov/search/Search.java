@@ -25,27 +25,22 @@ import org.apache.lucene.util.IOUtils;
 
 public class Search {
   private static String[] documents = {
-      "This is one document",
-      "This is another document",
-      "Let's not forget the third one",
+      "This is one document about a cat and a dog",
+      "This is another document about a cat",
+      "Let's not forget the third one, dog and a cat",
       "And this is something else",
-      "Last document"
-  };
-
-  // From 1 to 5. 1 most important.
-  private static int[] importance = {
-      5, 1, 3, 2, 5
+      "Last document. Dog. cat."
   };
 
   private static void search(String queryString, IndexSearcher isearcher, StandardAnalyzer analyzer) throws IOException, ParseException {
     System.out.println("Query: " + queryString);
-    QueryParser parser = new QueryParser("fieldname", analyzer);
+    QueryParser parser = new QueryParser("text", analyzer);
     Query query = parser.parse(queryString);
     ScoreDoc[] hits = isearcher.search(query, 10).scoreDocs;
     System.out.println("Hits # = " + hits.length);
     for (int i = 0; i < hits.length; i++) {
       Document hitDoc = isearcher.doc(hits[i].doc);
-      System.out.println(hits[i].doc + " " + hitDoc.get("fieldname"));
+      System.out.println(hits[i].doc + " " + hitDoc.get("text"));
     }
   }
 
@@ -58,8 +53,7 @@ public class Search {
     for (int di = 0; di < Search.documents.length; di++) {
       Document doc = new Document();
       String text = Search.documents[di];
-      doc.add(new Field("fieldname", text, TextField.TYPE_STORED));
-      //doc.add(new IntField("importance", Search.importance[di]));
+      doc.add(new Field("text", text, TextField.TYPE_STORED));
       iwriter.addDocument(doc);
     }
     iwriter.close();
@@ -76,7 +70,7 @@ public class Search {
     DirectoryReader ireader = DirectoryReader.open(directory);
     IndexSearcher isearcher = new IndexSearcher(ireader);
 
-    search("fieldname: \"document\" OR \"something\"", isearcher, analyzer);
+    search("text: \"cat\" AND \"dog\"", isearcher, analyzer);
 
     ireader.close();
     directory.close();
