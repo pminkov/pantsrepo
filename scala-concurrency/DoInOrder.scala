@@ -39,6 +39,7 @@ object DoInOrder extends CanRun {
 
     val df: Int => Future[Char] = doInOrder(f, g)
     println(Await.result(df(1345)))
+    println(Await.result(df(1345)))
 
     val df2: Int => Future[Char] = doInOrder2(f, g)
     println(Await.result(df2(325)))
