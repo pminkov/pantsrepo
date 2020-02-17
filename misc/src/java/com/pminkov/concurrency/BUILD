@@ -1,7 +1,10 @@
 jvm_binary(
-  name = 'second-counters',
-  source = 'SecondCounters.java',
-  main = 'com.pminkov.concurrency.SecondCounters',
+  name = 'runner',
+  source = 'Runner.java',
+  dependencies = ['misc/src/java/com/pminkov/concurrency'],
+  main = 'com.pminkov.concurrency.Runner',
 )
 
+java_library(
+)
 
