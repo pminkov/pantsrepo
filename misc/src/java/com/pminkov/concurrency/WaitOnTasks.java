@@ -39,6 +39,10 @@ class Task implements Runnable {
   }
 }
 
+/**
+ * Start executing periodic tasks and be able to get a CompletableFuture which
+ * gets completed when we cancel execution or when we run each task once.
+ */
 class TaskList {
   private ArrayList<ScheduledFuture<?>> futures = new ArrayList<ScheduledFuture<?>>();
   private CountDownLatch countDownLatch;
@@ -65,12 +69,16 @@ class TaskList {
 
   public void cancel() {
     for (int i = 0; i < futures.size(); i++) {
+      // Don't interrupt, we want to complete not through the
+      // decreasing of the CDL, but through completing the future
+      // manually, mostly for the purposes of this experiment, not for
+      // practical reasons.
       futures.get(i).cancel(false);
     }
     allRanOnceOrCancelled.complete("cancelled");
   }
 
-  public CompletableFuture<String> getAllRanOnceOrCanclledFuture() {
+  public CompletableFuture<String> getAllRanOnceOrCancelledFuture() {
     return allRanOnceOrCancelled;
   }
 }
@@ -82,7 +90,7 @@ class TaskListManager {
   void run() {
     TaskList tl = new TaskList(executorService,2);
 
-    tl.getAllRanOnceOrCanclledFuture().thenAcceptAsync((String message) -> {
+    tl.getAllRanOnceOrCancelledFuture().thenAcceptAsync((String message) -> {
       System.out.println("DONE:" + message);
     });
 
