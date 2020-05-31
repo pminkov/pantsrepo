@@ -5,8 +5,10 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -244,9 +246,57 @@ class Exceptions extends Exercise {
   }
 }
 
+class References extends Exercise {
+  class Person {
+    private String name;
+    public Person(String name) {
+      this.name = name;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    @Override
+    public String toString() {
+      return "Name: " + this.name;
+    }
+  }
+
+  @Override
+  public void run() {
+    Map<Integer, Person> map = new HashMap<Integer, com.pminkov.learnjava.References.Person>();
+
+    Person p = new Person("petko");
+    map.put(5, p);
+
+    System.out.println(map.get(5));
+
+    p.setName("ivan");
+    System.out.println(map.get(5));
+
+    p = new Person("hello");
+
+    System.out.println(map.get(5));
+  }
+}
+
+class NpException extends Exercise {
+  List<String> thelist;
+
+  @Override
+  public void run() {
+    System.out.println(thelist.size());
+  }
+}
+
 public class LearnJava {
   public static void main(String[] args) {
-      Exceptions exercise = new Exceptions();
+      NpException exercise = new NpException();
       exercise.run();
   }
 }

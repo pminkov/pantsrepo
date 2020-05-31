@@ -17,3 +17,14 @@ jar_library(name='twitter-finagle-http',
     )
   ]
 )
+
+jar_library(name='guice-google',
+  jars=[
+    jar(
+      org='com.google.inject',
+      name='guice',
+      rev='4.2.1',
+    )
+  ]
+)
+
