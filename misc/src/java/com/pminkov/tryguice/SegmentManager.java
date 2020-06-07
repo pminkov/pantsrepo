@@ -7,7 +7,6 @@ public class SegmentManager {
   private Clock myClock;
 
   StatsReceiver statsReceiver;
-
   Clock backupClock;
 
   @Inject

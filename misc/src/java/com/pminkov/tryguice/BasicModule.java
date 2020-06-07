@@ -1,9 +1,11 @@
 package com.pminkov.tryguice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
 import com.google.inject.Provides;
 
 public class BasicModule extends AbstractModule {
+
     @Override
     protected void configure() {
       bind(Clock.class).to(ProdClock.class);
@@ -11,6 +13,7 @@ public class BasicModule extends AbstractModule {
 
     @Provides
     StatsReceiver provideStatsReceiver() {
-      return new StatsReceiver();
+
+      return new StatsReceiver("prefix");
     }
 }
