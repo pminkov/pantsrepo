@@ -294,9 +294,38 @@ class NpException extends Exercise {
   }
 }
 
+class ExceptionsInFunctionalInterfaces extends Exercise {
+
+  @FunctionalInterface
+  interface CheckedRunnable<X extends Throwable> {
+    void run() throws X;
+  }
+
+  <X extends Throwable> void run(CheckedRunnable<X> cr) throws X {
+    cr.run();
+  }
+/*
+  void run(Runnable cr) {
+    cr.run();
+  }*/
+
+  void myFunc() throws IOException {
+    throw new IOException("io ex");
+  }
+
+  @Override
+  public void run() {
+    try {
+      this.run(this::myFunc);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+}
+
 public class LearnJava {
   public static void main(String[] args) {
-      NpException exercise = new NpException();
-      exercise.run();
+    ExceptionsInFunctionalInterfaces ex = new ExceptionsInFunctionalInterfaces();
+    ex.run();
   }
 }

@@ -10,6 +10,7 @@ public class StatsReceiver {
 
   @Inject
   public StatsReceiver(String prefix) {
+    System.out.println("Creating stats receiver");
     this.prefix = prefix;
   }
 

@@ -1,10 +1,5 @@
 package com.pminkov.tryguice;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -14,16 +9,17 @@ public class TryGuice {
 
     SegmentManager segmentManager = injector.getInstance(
         SegmentManager.class);
+    SegmentManager segmentManager2 = injector.getInstance(
+        SegmentManager.class);
 
     System.out.println(segmentManager);
+    System.out.println(segmentManager2);
 
     segmentManager.hello();
-
+    segmentManager2.hello();
   }
 
   public static void main(String[] args) {
-    System.out.println("what's up");
-
     TryGuice tg = new TryGuice();
     tg.run();
   }

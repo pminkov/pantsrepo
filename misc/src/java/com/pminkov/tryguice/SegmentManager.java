@@ -10,8 +10,9 @@ public class SegmentManager {
   Clock backupClock;
 
   @Inject
-  public SegmentManager(StatsReceiver statsReceiver) {
-    System.out.println("constructor");
+  public SegmentManager(
+      StatsReceiver statsReceiver) {
+    System.out.println("SegmentManager constructor");
 
     backupClock = new ProdClock("backup");
     this.statsReceiver = statsReceiver;
