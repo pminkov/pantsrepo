@@ -14,9 +14,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.IntConsumer;
 import java.lang.IllegalArgumentException;
-import java.util.stream.Collectors;
 
 import static java.util.Optional.of;
 
@@ -299,10 +297,27 @@ class ExceptionsInFunctionalInterfaces extends Exercise {
   @FunctionalInterface
   interface CheckedRunnable<X extends Throwable> {
     void run() throws X;
+
+    static CheckedRunnable<Throwable> wrapRunnable(Runnable rr) {
+      return new CheckedRunnable<Throwable>() {
+        @Override
+        public void run() throws Throwable {
+          rr.run();
+        }
+      };
+    }
   }
 
   <X extends Throwable> void run(CheckedRunnable<X> cr) throws X {
     cr.run();
+  }
+
+  void runSimple(Runnable rr) {
+    try {
+      this.run(CheckedRunnable.wrapRunnable(rr));
+    } catch (Throwable ex) {
+      System.err.println("should not happen");
+    }
   }
 /*
   void run(Runnable cr) {
@@ -312,10 +327,14 @@ class ExceptionsInFunctionalInterfaces extends Exercise {
   void myFunc() throws IOException {
     throw new IOException("io ex");
   }
+  void simpleFunc() {
+    System.out.println("hey hey");
+  }
 
   @Override
   public void run() {
     try {
+      this.runSimple(this::simpleFunc);
       this.run(this::myFunc);
     } catch (IOException ex) {
       ex.printStackTrace();
