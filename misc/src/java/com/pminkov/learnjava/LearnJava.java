@@ -342,9 +342,68 @@ class ExceptionsInFunctionalInterfaces extends Exercise {
   }
 }
 
+class ExceptionsStuff extends Exercise {
+  public void getFromArray() {
+    try {
+      ArrayList<Integer> x = new ArrayList<>();
+      x.add(16);
+      x.add(3);
+      int what = x.get(5);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      throw new RuntimeException(ex);
+    }
+  }
+  @Override
+  public void run() {
+    try {
+      getFromArray();
+    } catch (Exception ex) {
+      //ex.printStackTrace();
+    }
+  }
+}
+
+class Hello {
+  public static void hello() {
+    Thread t = new Thread(() -> {
+      throw new RuntimeException("bazz");
+    });
+    t.start();
+    try {
+      t.join();
+    } catch (InterruptedException ex) {
+      System.out.printf("interrupted");
+    }
+  }
+}
+class ExceptionsOnThread extends Exercise {
+  @Override
+  public void run() {
+    Thread.setDefaultUncaughtExceptionHandler((thread, e) -> {
+        System.out.println("Caught exception! " +  e.getLocalizedMessage());
+    });
+
+    Hello.hello();
+/*
+    try {
+      System.out.println("starting");
+      Thread t = new Thread(() -> {
+        System.out.println("throwing exception");
+        throw new RuntimeException("boss");
+      });
+      t.start();
+      t.join();
+    } catch (InterruptedException ex) {
+      System.out.println("interrupted");
+    }
+ */
+  }
+}
+
 public class LearnJava {
   public static void main(String[] args) {
-    ExceptionsInFunctionalInterfaces ex = new ExceptionsInFunctionalInterfaces();
+    ExceptionsOnThread ex = new ExceptionsOnThread();
     ex.run();
   }
 }
