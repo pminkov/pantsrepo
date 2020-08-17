@@ -28,3 +28,13 @@ jar_library(name='guice-google',
   ]
 )
 
+jar_library(name='fastutil',
+  jars=[
+    jar(
+      org='it.unimi.dsi',
+      name='fastutil',
+      rev='8.1.0'
+    )
+  ]
+)
+

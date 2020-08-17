@@ -2,6 +2,7 @@ jvm_binary(
   name = 'learn',
   source = 'LearnJava.java',
   main = 'com.pminkov.learnjava.LearnJava',
+  dependencies = ['3rdparty/jvm:fastutil']
 )
 
 jvm_binary(

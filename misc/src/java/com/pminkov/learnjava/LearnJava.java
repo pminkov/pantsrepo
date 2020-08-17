@@ -16,6 +16,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.lang.IllegalArgumentException;
 
+import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
+
+
 import static java.util.Optional.of;
 
 abstract class Exercise {
@@ -401,9 +406,49 @@ class ExceptionsOnThread extends Exercise {
   }
 }
 
+class ThreadVisibility extends Exercise {
+  private int[] x = new int[20];
+  @Override
+  public void run() {
+    Thread t = new Thread(() -> {
+      while (x[2] == 0);
+      System.out.println("done");
+    });
+    t.start();
+    x[2] = 1;
+    try {
+      t.join();
+    } catch (InterruptedException ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+}
+
+class TryFasutil extends Exercise {
+  @Override
+  public void run() {
+    IntArrayFIFOQueue fq = new IntArrayFIFOQueue(5);
+
+    ArrayList<Integer> x = new ArrayList<Integer>();
+    x.add(5);
+    x.add(16);
+    x.add(20);
+
+    fq.enqueue(15);
+    fq.enqueue(4);
+    fq.enqueueFirst(-1);
+
+    IntArrayList fi = new IntArrayList();
+    fi.add(16);
+
+    System.out.println(x.size());
+    System.out.println(fq.size());
+  }
+}
+
 public class LearnJava {
   public static void main(String[] args) {
-    ExceptionsOnThread ex = new ExceptionsOnThread();
-    ex.run();
+    TryFasutil t = new TryFasutil();
+    t.run();
   }
 }
