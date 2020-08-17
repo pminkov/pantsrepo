@@ -10,11 +10,13 @@ import java.util.List;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.lang.IllegalArgumentException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -446,9 +448,64 @@ class TryFasutil extends Exercise {
   }
 }
 
+class ConcurrencyWithArray extends Exercise {
+  private final long startTime;
+  private final ArrayList<IntArrayFIFOQueue> iqs;
+  private  int counter;
+
+  public ConcurrencyWithArray() {
+    startTime = System.currentTimeMillis();
+    iqs = new ArrayList<>();
+  }
+
+  boolean done() {
+    return System.currentTimeMillis() - startTime > 2000;
+  }
+
+  @Override
+  public void run() {
+    final AtomicInteger pass = new AtomicInteger();
+    final AtomicInteger fail = new AtomicInteger();
+    Thread t = new Thread(() -> {
+      while (!done()) {
+        int saveCounter = counter;
+        boolean ok = true;
+        for (int i = 0; i < iqs.size(); i++) {
+          if (iqs.get(i).lastInt() < counter) {
+            ok = false;
+          }
+        }
+        if (ok) pass.incrementAndGet();
+        else fail.incrementAndGet();
+      }
+    });
+
+    t.start();
+
+    Random r = new Random(55);
+    counter = 0;
+    while (!done()) {
+      int newvalue = counter + 1;
+      for (int i = 0; i < iqs.size(); i++) {
+        iqs.get(i).enqueue(newvalue);
+      }
+      counter++;
+    }
+
+    try {
+      t.join();
+    } catch (InterruptedException ex) {
+      throw new RuntimeException(ex);
+    }
+
+    System.out.println(pass.intValue());
+    System.out.println(fail.intValue());
+  }
+}
+
 public class LearnJava {
   public static void main(String[] args) {
-    TryFasutil t = new TryFasutil();
-    t.run();
+    ConcurrencyWithArray cw = new ConcurrencyWithArray();
+    cw.run();
   }
 }
