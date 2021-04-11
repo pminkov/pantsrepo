@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.IntField;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -58,6 +57,7 @@ public class Search {
   }
 
 
+
   private static Directory indexDocs(Path indexPath, StandardAnalyzer analyzer) throws IOException {
     Directory directory = FSDirectory.open(indexPath);
     IndexWriterConfig config = new IndexWriterConfig(analyzer);
@@ -76,6 +76,8 @@ public class Search {
 
   public static void main(String[] args) throws IOException, ParseException {
     Path indexPath = Files.createTempDirectory("tempIndex");
+    System.out.println("Location: " + indexPath.toString());
+
     StandardAnalyzer analyzer = new StandardAnalyzer();
     Directory directory = indexDocs(indexPath, analyzer);
 

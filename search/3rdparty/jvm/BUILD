@@ -3,7 +3,7 @@ jar_library(name='lucene-core',
     jar(
       org='org.apache.lucene',
       name='lucene-core',
-      rev='5.2.1',
+      rev='8.5.2',
     )
   ]
 )
@@ -13,7 +13,7 @@ jar_library(name='lucene-queryparser',
     jar(
       org='org.apache.lucene',
       name='lucene-queryparser',
-      rev='5.2.1',
+      rev='8.5.2',
     )
   ]
 )
@@ -23,7 +23,7 @@ jar_library(name='lucene-analyzers-common',
     jar(
       org='org.apache.lucene',
       name='lucene-analyzers-common',
-      rev='5.2.1',
+      rev='8.5.2',
     )
   ]
 )
