@@ -28,3 +28,12 @@ jar_library(name='lucene-analyzers-common',
   ]
 )
 
+jar_library(name='google-guava',
+  jars=[
+    jar(
+      org='com.google.guava',
+      name='guava',
+      rev='30.1.1-jre'
+    )
+  ]
+)

@@ -3,6 +3,8 @@ package com.pminkov.search;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -29,6 +31,8 @@ import org.apache.lucene.util.IOUtils;
 
 
 public class Search {
+  public static final String DIR_BASE = Paths.get(System.getProperty("user.home"), "workspace", "search").toString();
+
   private static String[] documents = {
       "This is one document about a cat and a dog",
       "This is another document about a cat",
@@ -56,8 +60,6 @@ public class Search {
     }
   }
 
-
-
   private static Directory indexDocs(Path indexPath, StandardAnalyzer analyzer) throws IOException {
     Directory directory = FSDirectory.open(indexPath);
     IndexWriterConfig config = new IndexWriterConfig(analyzer);
@@ -74,8 +76,15 @@ public class Search {
     return directory;
   }
 
-  public static void main(String[] args) throws IOException, ParseException {
-    Path indexPath = Files.createTempDirectory("tempIndex");
+
+  public static void indexThings() throws IOException, ParseException {
+    // Create index path.
+
+    String indexUuid = UUID.randomUUID().toString();
+
+    final Path indexPathLocation = Paths.get(DIR_BASE, "index", indexUuid);
+    Path indexPath = Files.createDirectory(indexPathLocation);
+
     System.out.println("Location: " + indexPath.toString());
 
     StandardAnalyzer analyzer = new StandardAnalyzer();
@@ -103,7 +112,16 @@ public class Search {
 
     ireader.close();
     directory.close();
-    IOUtils.rm(indexPath);
+    //IOUtils.rm(indexPath);
+  }
+
+  public static void main(String[] args) throws IOException, ParseException {
+    TextCorpus corpus = new TextCorpus();
+    corpus.load();
+
+    DocsIndexer docsIndexer = new DocsIndexer(corpus);
+
+    docsIndexer.makeIndex(5000000);
   }
 }
 
